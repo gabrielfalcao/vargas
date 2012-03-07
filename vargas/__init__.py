@@ -29,6 +29,7 @@ version = '0.1'
 
 plural_de = lambda singular, plural, numero: numero > 1 and plural or singular
 
+
 class Restante(object):
     def __init__(self, valor, unidade):
         self.valor = valor
@@ -36,16 +37,16 @@ class Restante(object):
 
     @property
     def pouco_mais_de_1_minuto(self):
-        if self.valor < 5 and self.unidade == 'minuto':
+        if self.valor < 5 and self.unidade == u'minuto':
             return True
-        elif self.valor < 60 and self.unidade == 'segundos':
+        elif self.valor < 60 and self.unidade == u'segundos':
             return True
 
         return False
 
     @property
     def meia_hora(self):
-        if self.valor == 30 and self.unidade == 'minutos':
+        if self.valor == 30 and self.unidade == u'minutos':
             return True
 
         return False
@@ -53,17 +54,18 @@ class Restante(object):
     @property
     def string(self):
         if self.valor > 0:
-            return " e %d %s" % (self.valor, self.unidade)
-        return ""
+            return u" e %d %s" % (self.valor, self.unidade)
+        return u""
+
 
 class TempoRelativo(object):
     possibilidades = (
       (60 * 60 * 24 * 365, lambda n: plural_de(u'ano', u'anos', n)),
       (60 * 60 * 24 * 30, lambda n: plural_de(u'mês', u'meses', n)),
-      (60 * 60 * 24 * 7, lambda n : plural_de(u'semana', u'semanas', n)),
-      (60 * 60 * 24, lambda n : plural_de(u'dia', u'dias', n)),
+      (60 * 60 * 24 * 7, lambda n: plural_de(u'semana', u'semanas', n)),
+      (60 * 60 * 24, lambda n: plural_de(u'dia', u'dias', n)),
       (60 * 60, lambda n: plural_de(u'hora', u'horas', n)),
-      (60, lambda n: plural_de('minuto', 'minutos', n))
+      (60, lambda n: plural_de(u'minuto', u'minutos', n)),
     )
 
     def __init__(self, anterior):
@@ -89,7 +91,7 @@ class TempoRelativo(object):
                         valor_restante = sobra / segundos_restantes
                         restante = Restante(valor_restante, unidade_restante(valor_restante))
                     else:
-                        restante = Restante(sobra, plural_de('segundo', 'segundos', sobra))
+                        restante = Restante(sobra, plural_de(u'segundo', u'segundos', sobra))
 
                 return string, restante
 
@@ -100,12 +102,12 @@ class TempoRelativo(object):
 
         string, restante = self.string
 
-        predicado = ""
+        predicado = u""
         if restante:
             if restante.pouco_mais_de_1_minuto:
-                predicado = " pouco mais de"
+                predicado = u" pouco mais de"
             elif restante.meia_hora:
-                string += " e meia"
+                string += u" e meia"
             else:
                 string += restante.string
 
