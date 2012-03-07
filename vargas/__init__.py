@@ -98,7 +98,7 @@ class TempoRelativo(object):
     @property
     def ha(self):
         if self.decorrido < 60:
-            return u'há menos de um minuto'
+            return unicode(u'há menos de um minuto', 'utf-8')
 
         string, restante = self.string
 
@@ -111,19 +111,19 @@ class TempoRelativo(object):
             else:
                 string += restante.string
 
-        return u"há%s %s" % (predicado, string)
+        return unicode(u"há%s %s" % (predicado, string), 'utf-8')
 
     @property
     def atras(self):
         if self.decorrido < 60:
-            return u'alguns segundos atrás'
+            return unicode(u'alguns segundos atrás', 'utf-8')
 
         string, restante = self.string
 
         if restante:
             string += restante.string
 
-        return u"%s atrás" % string
+        return unicode(u"%s atrás" % string, 'utf-8')
 
     def __unicode__(self):
         return self.ha
