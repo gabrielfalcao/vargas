@@ -23,6 +23,7 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
+from __future__ import unicode_literals
 
 from datetime import datetime
 version = '0.1'
@@ -37,16 +38,16 @@ class Restante(object):
 
     @property
     def pouco_mais_de_1_minuto(self):
-        if self.valor < 5 and self.unidade == u'minuto':
+        if self.valor < 5 and self.unidade == 'minuto':
             return True
-        elif self.valor < 60 and self.unidade == u'segundos':
+        elif self.valor < 60 and self.unidade == 'segundos':
             return True
 
         return False
 
     @property
     def meia_hora(self):
-        if self.valor == 30 and self.unidade == u'minutos':
+        if self.valor == 30 and self.unidade == 'minutos':
             return True
 
         return False
@@ -54,18 +55,18 @@ class Restante(object):
     @property
     def string(self):
         if self.valor > 0:
-            return u" e %d %s" % (self.valor, self.unidade)
-        return u""
+            return " e %d %s" % (self.valor, self.unidade)
+        return ""
 
 
 class TempoRelativo(object):
     possibilidades = (
-      (60 * 60 * 24 * 365, lambda n: plural_de(u'ano', u'anos', n)),
-      (60 * 60 * 24 * 30, lambda n: plural_de(u'mês', u'meses', n)),
-      (60 * 60 * 24 * 7, lambda n: plural_de(u'semana', u'semanas', n)),
-      (60 * 60 * 24, lambda n: plural_de(u'dia', u'dias', n)),
-      (60 * 60, lambda n: plural_de(u'hora', u'horas', n)),
-      (60, lambda n: plural_de(u'minuto', u'minutos', n)),
+      (60 * 60 * 24 * 365, lambda n: plural_de('ano', 'anos', n)),
+      (60 * 60 * 24 * 30, lambda n: plural_de('mês', 'meses', n)),
+      (60 * 60 * 24 * 7, lambda n: plural_de('semana', 'semanas', n)),
+      (60 * 60 * 24, lambda n: plural_de('dia', 'dias', n)),
+      (60 * 60, lambda n: plural_de('hora', 'horas', n)),
+      (60, lambda n: plural_de('minuto', 'minutos', n)),
     )
 
     def __init__(self, anterior):
@@ -80,7 +81,7 @@ class TempoRelativo(object):
             restante = None
             if self.decorrido >= segundos:
                 valor = int(self.decorrido / segundos)
-                string = u"%d %s" % (valor, unidade_de_tempo(valor))
+                string = "%d %s" % (valor, unidade_de_tempo(valor))
                 extra = float(self.decorrido) / segundos > valor
                 proximo = (total + 1)
 
@@ -91,39 +92,39 @@ class TempoRelativo(object):
                         valor_restante = sobra / segundos_restantes
                         restante = Restante(valor_restante, unidade_restante(valor_restante))
                     else:
-                        restante = Restante(sobra, plural_de(u'segundo', u'segundos', sobra))
+                        restante = Restante(sobra, plural_de('segundo', 'segundos', sobra))
 
                 return string, restante
 
     @property
     def ha(self):
         if self.decorrido < 60:
-            return u'há menos de um minuto'
+            return 'há menos de um minuto'
 
         string, restante = self.string
 
-        predicado = u""
+        predicado = ""
         if restante:
             if restante.pouco_mais_de_1_minuto:
-                predicado = u" pouco mais de"
+                predicado = " pouco mais de"
             elif restante.meia_hora:
-                string += u" e meia"
+                string += " e meia"
             else:
                 string += restante.string
 
-        return u"há%s %s" % (predicado, string)
+        return "há%s %s" % (predicado, string)
 
     @property
     def atras(self):
         if self.decorrido < 60:
-            return u'alguns segundos atrás'
+            return 'alguns segundos atrás'
 
         string, restante = self.string
 
         if restante:
             string += restante.string
 
-        return u"%s atrás" % string
+        return "%s atrás" % string
 
     def __unicode__(self):
         return self.ha

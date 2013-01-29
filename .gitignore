@@ -10,3 +10,4 @@ dist/
 .#**.tar.gz
 *.tar.bz2
 *egg-info*
+.tox/
