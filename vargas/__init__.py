@@ -24,6 +24,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+from __future__ import unicode_literals
+
 from datetime import datetime
 version = '0.1'
 
@@ -98,7 +100,7 @@ class TempoRelativo(object):
     @property
     def ha(self):
         if self.decorrido < 60:
-            return unicode(u'há menos de um minuto', 'utf-8')
+            return 'há menos de um minuto'
 
         string, restante = self.string
 
@@ -111,19 +113,19 @@ class TempoRelativo(object):
             else:
                 string += restante.string
 
-        return unicode(u"há%s %s" % (predicado, string), 'utf-8')
+        return "há{0} {1}".format(predicado, string)
 
     @property
     def atras(self):
         if self.decorrido < 60:
-            return unicode(u'alguns segundos atrás', 'utf-8')
+            return u'alguns segundos atrás'
 
         string, restante = self.string
 
         if restante:
             string += restante.string
 
-        return unicode(u"%s atrás" % string, 'utf-8')
+        return u"{0} atrás".format(string)
 
     def __unicode__(self):
         return self.ha

@@ -88,7 +88,7 @@ temos:
 
 instale a dependência "sure":
 
-    sudo pip install -r requirements.pip
+    sudo pip install -r requirements.txt
 
 depois basta rodar o make:
 
