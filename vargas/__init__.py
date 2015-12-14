@@ -23,7 +23,6 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-from __future__ import unicode_literals
 
 from datetime import datetime
 version = '0.1'
@@ -38,16 +37,16 @@ class Restante(object):
 
     @property
     def pouco_mais_de_1_minuto(self):
-        if self.valor < 5 and self.unidade == 'minuto':
+        if self.valor < 5 and self.unidade == u'minuto':
             return True
-        elif self.valor < 60 and self.unidade == 'segundos':
+        elif self.valor < 60 and self.unidade == u'segundos':
             return True
 
         return False
 
     @property
     def meia_hora(self):
-        if self.valor == 30 and self.unidade == 'minutos':
+        if self.valor == 30 and self.unidade == u'minutos':
             return True
 
         return False
@@ -55,18 +54,18 @@ class Restante(object):
     @property
     def string(self):
         if self.valor > 0:
-            return " e %d %s" % (self.valor, self.unidade)
-        return ""
+            return u" e %d %s" % (self.valor, self.unidade)
+        return u""
 
 
 class TempoRelativo(object):
     possibilidades = (
-      (60 * 60 * 24 * 365, lambda n: plural_de('ano', 'anos', n)),
-      (60 * 60 * 24 * 30, lambda n: plural_de('mês', 'meses', n)),
-      (60 * 60 * 24 * 7, lambda n: plural_de('semana', 'semanas', n)),
-      (60 * 60 * 24, lambda n: plural_de('dia', 'dias', n)),
-      (60 * 60, lambda n: plural_de('hora', 'horas', n)),
-      (60, lambda n: plural_de('minuto', 'minutos', n)),
+      (60 * 60 * 24 * 365, lambda n: plural_de(u'ano', u'anos', n)),
+      (60 * 60 * 24 * 30, lambda n: plural_de(u'mês', u'meses', n)),
+      (60 * 60 * 24 * 7, lambda n: plural_de(u'semana', u'semanas', n)),
+      (60 * 60 * 24, lambda n: plural_de(u'dia', u'dias', n)),
+      (60 * 60, lambda n: plural_de(u'hora', u'horas', n)),
+      (60, lambda n: plural_de(u'minuto', u'minutos', n)),
     )
 
     def __init__(self, anterior):
@@ -81,7 +80,7 @@ class TempoRelativo(object):
             restante = None
             if self.decorrido >= segundos:
                 valor = int(self.decorrido / segundos)
-                string = "%d %s" % (valor, unidade_de_tempo(valor))
+                string = u"%d %s" % (valor, unidade_de_tempo(valor))
                 extra = float(self.decorrido) / segundos > valor
                 proximo = (total + 1)
 
@@ -92,39 +91,39 @@ class TempoRelativo(object):
                         valor_restante = sobra / segundos_restantes
                         restante = Restante(valor_restante, unidade_restante(valor_restante))
                     else:
-                        restante = Restante(sobra, plural_de('segundo', 'segundos', sobra))
+                        restante = Restante(sobra, plural_de(u'segundo', u'segundos', sobra))
 
                 return string, restante
 
     @property
     def ha(self):
         if self.decorrido < 60:
-            return 'há menos de um minuto'
+            return unicode(u'há menos de um minuto', 'utf-8')
 
         string, restante = self.string
 
-        predicado = ""
+        predicado = u""
         if restante:
             if restante.pouco_mais_de_1_minuto:
-                predicado = " pouco mais de"
+                predicado = u" pouco mais de"
             elif restante.meia_hora:
-                string += " e meia"
+                string += u" e meia"
             else:
                 string += restante.string
 
-        return "há%s %s" % (predicado, string)
+        return unicode(u"há%s %s" % (predicado, string), 'utf-8')
 
     @property
     def atras(self):
         if self.decorrido < 60:
-            return 'alguns segundos atrás'
+            return unicode(u'alguns segundos atrás', 'utf-8')
 
         string, restante = self.string
 
         if restante:
             string += restante.string
 
-        return "%s atrás" % string
+        return unicode(u"%s atrás" % string, 'utf-8')
 
     def __unicode__(self):
         return self.ha
